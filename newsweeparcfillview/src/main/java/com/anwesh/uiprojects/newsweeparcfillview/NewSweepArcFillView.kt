@@ -12,10 +12,11 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.RectF
 import android.content.Context
+import android.util.Log
 
 val parts : Int = 4
 val scGap : Float = 0.02f / parts
-val strokeFactor : Float = 0.02f
+val strokeFactor : Float = 90f
 val sizeFactor : Float = 2.9f
 val deg : Float = 90f
 val totDeg : Float = 360f
@@ -33,7 +34,7 @@ val colors : Array<Int> = arrayOf(
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
-fun Float.divideScale(i : Int, n : Int) : Float = Math.sin(this * Math.PI).toFloat()
+fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 fun Float.sinify() : Float = Math.sin(this * Math.PI).toFloat()
 
 fun Canvas.drawNewSweepArcFill(scale : Float, w : Float, h : Float, paint : Paint) {
@@ -89,7 +90,8 @@ class NewSweepArcFillView(ctx : Context) : View(ctx) {
     data class State(var scale : Float = 0f, var dir : Float = 0f, var prevScale : Float = 0f) {
 
         fun update(cb : (Float) -> Unit) {
-            scale += prevScale * dir
+            Log.d("scale", "$scale")
+            scale += scGap * dir
             if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
                 dir = 0f
