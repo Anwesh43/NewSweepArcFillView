@@ -220,4 +220,13 @@ class NewSweepArcFillView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : NewSweepArcFillView {
+            val view : NewSweepArcFillView = NewSweepArcFillView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
